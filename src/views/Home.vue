@@ -20,6 +20,7 @@
       <p></p>
       <img v-bind:src="product.image_url" alt="No image found" />
       <p></p>
+      <button v-on:click="updateProductShow(product)">Update</button>
       <button v-on:click="showProduct(product)">More Info</button>
     </div>
     <dialog id="product-details">
@@ -30,6 +31,27 @@
         <p>Description: {{ currentProduct.description }}</p>
         <img :src="currentProduct.image_url" alt="No Image Found" />
         <p></p>
+        <button>Close</button>
+      </form>
+    </dialog>
+    <dialog id="product-update">
+      <form method="dialog">
+        <h1>Product Info</h1>
+        <p>
+          Name:
+          <input type="text" v-model="currentProduct.name" />
+        </p>
+        <p>
+          Price:
+          <input type="text" v-model="currentProduct.price" />
+        </p>
+        <p>
+          Description:
+          <input type="text" v-model="currentProduct.description" />
+        </p>
+        <img :src="currentProduct.image_url" alt="No Image Found" />
+        <p></p>
+        <button v-on:click="updateProduct(currentProduct)">Update</button>
         <button>Close</button>
       </form>
     </dialog>
@@ -82,6 +104,15 @@ export default {
       console.log(product);
       this.currentProduct = product;
       document.querySelector("#product-details").showModal();
+    },
+    updateProductShow: function (product) {
+      this.currentProduct = product;
+      document.querySelector("#product-update").showModal();
+    },
+    updateProduct: function (product) {
+      axios.patch("http://localhost:3000/products/" + product.id, product).then((response) => {
+        console.log("Success!", response.data);
+      });
     },
   },
 };
