@@ -19,7 +19,20 @@
       {{ product.name }} - ${{ product.price }}
       <p></p>
       <img v-bind:src="product.image_url" alt="No image found" />
+      <p></p>
+      <button v-on:click="showProduct(product)">More Info</button>
     </div>
+    <dialog id="product-details">
+      <form method="dialog">
+        <h1>Product Info</h1>
+        <p>Name: {{ currentProduct.name }}</p>
+        <p>Price: {{ currentProduct.price }}</p>
+        <p>Description: {{ currentProduct.description }}</p>
+        <img :src="currentProduct.image_url" alt="No Image Found" />
+        <p></p>
+        <button>Close</button>
+      </form>
+    </dialog>
   </div>
 </template>
 <style>
@@ -43,6 +56,7 @@ export default {
       blue: true,
       products: [],
       newProductParams: {},
+      currentProduct: {},
     };
   },
   created: function () {
@@ -63,6 +77,11 @@ export default {
         this.products.push(response.data);
         console.log(response.data).catch((error) => console.log(error.response));
       });
+    },
+    showProduct: function (product) {
+      console.log(product);
+      this.currentProduct = product;
+      document.querySelector("#product-details").showModal();
     },
   },
 };
